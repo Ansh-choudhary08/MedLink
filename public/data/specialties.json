@@ -1,0 +1,10 @@
+[
+  { "id": "s1", "name": "General Physician", "icon": "🏥" },
+  { "id": "s2", "name": "Cardiologist", "icon": "❤️" },
+  { "id": "s3", "name": "Dermatologist", "icon": "🧴" },
+  { "id": "s4", "name": "Psychiatrist", "icon": "🧠" },
+  { "id": "s5", "name": "Pediatrician", "icon": "👶" },
+  { "id": "s6", "name": "Orthopedist", "icon": "🦴" },
+  { "id": "s7", "name": "ENT Specialist", "icon": "👂" },
+  { "id": "s8", "name": "Neurologist", "icon": "🧬" }
+]
