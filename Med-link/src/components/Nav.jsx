@@ -1,27 +1,18 @@
 import { NavbarMenu } from "../mockData/data";
-import { Menu, LogOut } from "lucide-react";
+import { Menu } from "lucide-react";
 import logo from "../images/logo.png";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/Auth";
 
 const Nav = () => {
   const [open, setOpen] = useState(false);
-
+  const { user, logout } = useAuth();   // ✅ correct way
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
 
-  // ✅ Load user from localStorage
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) setUser(storedUser);
-  }, []);
-
-  // ✅ Logout Handler
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
+    logout();
     navigate("/");
   };
 
@@ -29,7 +20,8 @@ const Nav = () => {
     <>
       <nav className="w-full backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto flex justify-between items-center py-3 px-4">
-          {/* ✅ Logo */}
+
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-2 ml-4">
             <img
               className="h-20 w-auto transition-transform duration-300 hover:scale-105"
@@ -38,10 +30,10 @@ const Nav = () => {
             />
           </Link>
 
-          {/* ✅ Desktop Menu */}
+          {/* Desktop Menu */}
           <div className="hidden md:block">
             <ul className="flex items-center gap-8 text-gray-700">
-              {NavbarMenu?.map((menu) => (
+              {NavbarMenu.map((menu) => (
                 <li key={menu.id} className="group">
                   <Link
                     to={menu.link}
@@ -55,39 +47,26 @@ const Nav = () => {
             </ul>
           </div>
 
-          {/* ✅ RIGHT SIDE AUTH BUTTON */}
-          <div className="hidden md:flex items-center gap-4">
-            {/* ✅ SHOW USER NAME IF LOGGED IN */}
-            {user ? (
-              <>
-                <Link
-                  to="/dashboard"
-                  className="px-4 py-2 bg-primary text-white rounded-full"
-                >
-                  Dashboard
-                </Link>
+          {/* ✅ Login / Logout Toggle */}
+          {!user ? (
+            <Link
+              to="/login"
+              className="shadow-[inset_0_0_0_2px_#616467] mr-2 px-6 py-2 text-primary rounded-full tracking-widest uppercase bg-green-100 font-semibold transition-all duration-300 hidden md:block hover:bg-primary hover:text-white hover:scale-110 hover:shadow-lg"
+            >
+              Login
+            </Link>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="mr-2 px-6 py-2 bg-white text-primary rounded-full font-semibold hover:bg-primary hover:text-white"
+            >
+              Logout
+            </button>
+          )}
 
-                <button
-                  onClick={logout}
-                  className="px-4 py-2 border rounded-full ml-2"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/login"
-                className="shadow-[inset_0_0_0_2px_#616467] mr-2 px-6 py-2 text-primary rounded-full tracking-widest uppercase bg-green-100 font-semibold transition-all duration-300 hidden md:block hover:bg-primary hover:text-white"
-              >
-                Login
-              </Link>
-            )}
-            
-          </div>
-
-          {/* ✅ Mobile Menu Icon */}
+          {/* Mobile Menu */}
           <div
-            className="flex md:hidden cursor-pointer transition-transform duration-300 hover:scale-110"
+            className="flex md:hidden cursor-pointer"
             onClick={() => setOpen(!open)}
           >
             <Menu size={30} />
@@ -95,7 +74,6 @@ const Nav = () => {
         </div>
       </nav>
 
-      {/* ✅ Mobile Menu */}
       <ResponsiveMenu open={open} setOpen={setOpen} />
     </>
   );
